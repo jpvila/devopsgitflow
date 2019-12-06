@@ -1,0 +1,292 @@
+﻿INICIO
+npm config set proxy http://u197618:Marita0519@estomba4:8080
+npm config set https-proxy http://u197618:Marita0519@estomba4:8080
+
+ng build --prod --base-href https://jpvila.github.io/demoangular/ 
+
+EXPLICACION IMPORTANTE:
+Cuando se crea un repositorio local, hay una area intermedia entre la carpeta de trabajo y el repositorio que se llama stage.
+Cuando hacemos un git add, lo que hace es agregar los archivos que sufrieron alguna modificacion entre el directorio local
+y el repositorio pero todavia no estan confirmados en el repositorio. Cuando despues de agregar al stage se hace un commit
+recien ahi se pasa al repositorio y no se encuentra mas en stage.
+
+primero configurar git con tu usuario e email para que luego despues de realizar un cambio se sepa quien lo hizo
+git config --global user.name "juan pablo"
+git config --global user.email "jp@gmail.com"
+git config --global https.proxy https://u197618:Marita0420@estomba4:8080
+
+git config --global http.proxy http://u197618:Marita0420@estomba4:8080
+git config --list   (Te muestra el listado de lo que se encuentra configurado)
+
+*** inicializar el repositorio de codigo para indicarle a git el seguimiento en dicho directorio***
+mkdir proyectogit
+cd proyectogit
+git init   (esto lo que hace es inicializar el proyecto a aca para el seguimiento)
+
+
+*****
+Tenemos el comando add, que es para agregar git el control del archivo como agrego el punto, le digo a Git
+que agregue todo cambio hecho en esta carpeta
+*****
+git add .
+
+*****
+Despues para Git agregue todos los cambios realizados en su memoria se realiza con el siguiente comando commit
+
+***********
+Como borrar un archivo_
+a) Si se encuentra en la carpeta de trabajo y no fue subido al repositorio, es decir no se hizo un add y luego un commit, se borra
+directamente desde la carpeta de trabajo.
+Ahora si se subio al repositorio es decir se hizo un add y un commit. Los pasos para borrar el archivo son los siguientes:
+1- borrar el archivo de la carpeta de trabajo
+2- git rm nombre_archivo
+3- git commit -m "descripcion"
+
+
+*****
+git commit -m "Descripcion de la implementacion"
+
+Resumen por cada cambio que se haga algun archivo se debe realizar estos dos pasos que son "add" y luego "commit".
+
+Con el comando git log  (se puede la bitacora de los cambios realizados)
+
+
+*********
+git help log  (nos permite tener informacion del comando log)
+
+git log -n 5 (nos permite ver los ultimos 5 commit realizados)
+git log --since=2018-06-02  (nos permite ver todos los commit desde esa fecha para adelante)
+git log --author="juan pablo" (nos permite ver los commit de dicho autor)
+git log --grep="BUG205" (nos permite buscar dentro de los commits en el campo descripcion aquellos que coinciden con dicha palabra)
+git --online (permite ver todos los commit realizados pero en una sola linea y con el titulo nada mas)
+git --online -3 (Cuantas lineas queres ver del commit, en este caso te muestra las ultimos 3 commit)
+git log --since=2.weeks
+git log --since=2.days
+git log 8e87705.. ejemplo3.html (permite ver un version para adelante los cambios que sufrio un archivo puntual pero no te muestra el contenido solo te dice en que commit sufrio cambios)
+git log -p 47a1708..91de320 ejemplo3.html (permite ver que fue lo que cambio dentro del archivo desde ese rango de commit)
+
+git log 47a1708.. ejemplo3.html
+*******
+git status (nos permite ver si hay algun cambio entre nuestra carpeta de trabajo y el repositorio de git, es decir nada para commitear)
+Quiere decir que si agrego un nuevo archivo a la carpeta y ejecuto este comando git me dice que hay dos archivos nuevo entre nuestra
+carpeta de trabajo y el repositorio
+Entonces si agrego por ejemplo dos archivos ejemplo2.html y ejemplo3.html
+y ejecuto git status
+me informo los dos archivos que no tiene bajo su control
+si luego hago git add ejemplo2.html
+y ejecuto git status, me va a informar que ya tiene ejemplo2.html bajo su control que falta hacer el commit y luego otro que no fue agregado.
+El archivo ejemplo2.html, esta en un grupo de cambios que son candidatos hacer el commit. El otro ejemplo3.html esta fuera del control
+porque no se agrego.
+Ahora con git commit -m "nueva pagina ejemplo2.html"  (lo que hago es que ya se aplique todos los cambios que estaban pendientes a commitear)
+
+******
+Para ver las diferencias de un archivo se usa el comando diff
+git diff  (te muestra la diferencia de todos los archivos, compara lo que esta en la carpeta de trabajo contra el repositorio local de git)
+git diff ejemplo.html (mira las diferencias solo de ese archivo)
+git diff --staged (lo que hace es comprar las diferencias entre los archivos que estan en HEAD, es decir en staged, contra los que estan en el respositorio
+
+*******
+En el caso de que queramos renombar un archivo que se encuentra en la carpeta de trabajo y en el repositorio, pero deseamos renombrarlo de nuestra carpeta
+de trabajo y luego subirlo al repositorio se usa el comando git mv, que automaticamente cambia el nombre y lo pone en stage para luego hacer el commite.
+git mv ejemplo.html ejemplo_principal.html
+
+*******
+En el caso de que se cambie un archivo de nuestra carpeta de trabajo por error, se puede restaurar del repositorio con el comando checkout
+git checkout -- nombreDelArchivo (en este caso te trae y te piso de tu carpeta de trabajo ese archivo que se encuentra en el repositorio con la ultimo commit)
+git checkout 91de320fae21cc194925f7db05579bab91a3ad3f -- ejemplo2.html (en este caso te trae ese archivo puntual de esa version y te lo pisa con tu area de trabajo
+lo deja el archivo ya en el area de staged, por si queres compararlo con el repositorio. Obviamene si esta en staged es porque ya se paso esa version de
+la carpeta actual a staged)
+
+*******
+Como borrar un archivo que paso al area de staged y nos arrepentimos
+git reset HEAD nombreDelArchivo
+
+*****
+En el caso de que lo que quiero comitear deseo que no se cree un nuevo commit sino que se agregue al ultimo se usa el comando
+git commit --amend -m "aca va la descripcion del ultimo commit a traves del comando git log"
+
+*****
+Se puede revertir los cambios hechos en un commit, y lo que hace anula todos los cambios aplicados a dicho commit. (Ahora tu carpeta de trabajo
+tambien aplica el cambio, es decir se actualiza con la version anterior)
+git revert 91de320fae21cc194925f7db05579bab91a3ad3f
+
+*****
+Si por alguna razon se avanzo con los commit, y se desea volver la rama master (Que es la troncal que esta en el repositorio) a un determinado commit.
+Cuando se hace eso ahora el cursor apunta dentro del troncal master a un determinado commit, por ende lo que estaba arriba sino se guardo el ultimo commit
+no se va  poder volver. Ahora cuando se ejecuta se baja los cambios de dicho commit al area de staged y no se toca el area de trabajo, ahi se puede
+comparar lo que esta en el area de trabajo con el staged con los cambios que se hicieron en dicho commit.
+git reset --soft 91de320fae21cc194925f7db05579bab91a3ad3f
+
+Si por alguna razon se avanzo con los commit, y se desea volver la rama master (Que es la troncal que esta en el repositorio) a un determinado commit.
+Idem al comando anterior con la diferencia que lo baja al area de trabajo para comparar pero no pisa el archivo como en checkout, solamente permite comparar
+ahora pero con la carpeta de trabajo. Es mejor que el comando anterior.
+git reset --mixed 91de320fae21cc194925f7db05579bab91a3ad3f
+
+Despues esta el Hard que a diferencia de los anterior pisa el cambio que hay en ese commit con lo que esta en el area de trabajo.
+Aca un breve resumen
+en términos simples y sin cosas técnicas (a como yo lo entiendo)
+
+Soft => 
+
+"elimina" los commits posteriores al commit al que estas haciendo el reset
+conserva los cambios en el stage area
+conserva los cambios que tengas en tus archivos (working directory)
+Mixed => 
+
+"elimina" los commits posteriores al commit al que estas haciendo el reset
+Deshace los cambios en el stage area
+conserva los cambios que tengas en tus archivos (working directory)
+Hard=> 
+
+"elimina" los commits posteriores al commit al que estas haciendo el reset
+Deshace los cambios en el stage area
+Deshace los cambios que tengas en tus archivos (working directory)
+
+--------------------------------
+******
+Para ignorar archivos de la carpeta de trabajo como por ejemplo extension de archivos compilados, etc. se crea un achivo con el nombre
+.gitignore  y dentro se pone lo que se quiere ignorar
+ejemplo dentro del archivo .gitignore se puede encontrar:
+ejempl3.html
+*.dex
+log/*.log
+nodemodules/ (hay que poner la barra al final para que ignore todo lo que esta dentro de esa carpeta
+!nodemodule/*.txt (aca lo que se dice que tenga en cuenta los archivos que son *.txt)
+*******************
+Para ver lo que hay en el repositorio git (del branch master)
+git ls-tree master
+Esta es ejecucion como se ve lo que lista, los archivos se muestran como blob y las carpetas como tree
+100644 blob 6804dd3e00254b488c6bc40c5fc61bc05fbf2e88    ejemplo.html
+100644 blob 9b465f2ae6e356ee0d22ef478f081f2b4487c4aa    ejemplo2.html
+100644 blob 040633c6012b947cf195adfdf5bd5bb55da32cd2    ejemplo3.html
+100644 blob bfd3006b136ebf04f083f3e10e2f011b37eceaf6    ejemplo_principal.html
+040000 tree c729a96dec7834fc3cd34f4074210202e9b0d5a9    productos
+
+Si queremos ver que hay dentro de una carpeta del repositorio el comando seria:
+git ls-tree master productos/
+Ejemplo del resultado:
+C:\proyectogit>git ls-tree master productos/
+100644 blob e549d344e1cf033cf62b90d1c0fdc3b510dc58e3    productos/ejemplo3.html
+
+Para ver una determina version en el repositorio en la rama master se usa el "~" y el numero que identifica el numero de versiones para atras
+git ls-tree master~1  (En este ejemplo mira la version anterior a la actual)
+
+**********************
+Mostrar el contenido de un commit
+git log --oneline
+git show f54ae8a (te muestra el contenido de ese commit)
+
+********************************
+Comparando dos commit
+git diff 1928878..91de320
+Compara los dos commit
+
+
+***********************
+Comparar el master local con el master remoto en github
+git diff origin/master master..master
+
+****** Subir los cambios al repositorio remotor github (origin/master)
+git push  (te sube todo lo que esta en el master local al origin/master remoto)
+
+***** crear un branch **
+git branch (lista los branch que hay creado)
+git branch REQ01 (te crea un branch con el nombre REQ01)
+
+**** hay un comando con el commit que hace el add y el commit en el mismo momento
+git commit -am "descripcion"
+
+**** para apuntar a otro branch ***
+git checkout REQ01
+git checkout master
+
+
+*** para ver en una forma grafica los commit que tenemos en cada branch
+git --graph --oneline --decorate --all
+
+
+*** Si queremos ver la diferencia entre dos branch
+git differ --color-words BUG001..desarollo (te muestra las diferencias entres esos dos branch apuntando siempre al ultimmo commit de cada uno)
+
+
+** Cambiar el nombre a un branch **
+git branch -m CAMBIO REQ002
+
+
+** Borrar un branch **
+git branch -d nombre_branch_a_borrar
+
+
+**** subir un repositorio a github **
+Primero crear el repositorio en github. Una vez creado nos dara una url para subir el repositorio master que se encuentra en la pc.
+git remote add origin https://github.com/jpvila/udemygit.git  (con esta sentencia estamos apuntando al repositorio git remoto)
+
+*******
+git remote -v
+Nos dice a que repositorio remoto estamos apuntando
+
+****
+Para borrar un vinculo a un repositorio remoto para despues agregar uno nuevo hacemos:
+git remote remove origin
+ 
+Con esta sentencia lo subimos el repositorio local al github
+git push -u origin master
+
+** Ver los branch remotos ***
+git branch -r
+
+*** IMPORTANTE: Hay que usar el comando fetch que baja los commit del repositorio github a la pc pero al origin/master de nuestra pc. Y el master de nuestra
+pc (que es el espacio de trabajo) no tiene el cambio y te permite comparar. El origin/master es una copia local del repositorio remoto, si no se hace
+un fetch no se actualiza esa copia local con lo que hay en el repositorio remoto. Es importante usar el fetch porque no altera nuestro
+directorio de trabajo (master) entonces se puede comparar que fue lo que hizo otro compañero. Como buenas praticas antes de comenzar
+a trabajar cada mañana se debe realizar un fecth para ver los cambios que se hicieron. Tambien antes de hacer un push, hay que hacer un fetch
+para comparar si alguien estuvo trabajando con dicho archivo en el repositorio de github y no pisar su trabajo, primero se compara y despues se sube.
+git fetch origin
+
+Luego de hacer el fetch se hace el merge para unir los cambios que hay en el origin/master con el master local (cuando se hace el merge ahi se actualiza la
+carpeta de trabajo)
+git merge origin/master
+
+*** Comando pull ***
+El comando pull hay que tener mucho cuidado porque hace un fetch y un merge en forma automatica entonces no se tiene visibilidad que es esta haciendo.
+
+
+** para ver todos los branches locales y el branch remoto **
+git branch -a
+
+*** Crear un branch remoto **
+Lo correcto es una vez bajado el repositorio de github, hacer un branch local en el cual se va a trabajar para corregir un incidente o un requerimiento
+y subirlo a github para compartirlo con otras personas que trabajen en el mismo.
+
+*** Para subir un branch nuevo local al github remoto **
+git push -u origin nombre_branch
+
+
+**** Como descargar un branch remoto a nuestra pc creando ese branch como local ****
+1. Nos bajamos todo el repositorio con el comando clone, que incluye el master y el branch
+Porque siempre para trabajar con un branch remoto tenemos que crear un branch local y asociarlo a ese branch remoto
+para eso se usa el siguiente comando. NOTA: Se recomienda poner el mismo nombre del branch local con el branch remoto.
+git clone la_url  nombre_carpeta_a_donde_descargar
+git branch -a (nos lista todos los branch locales y remotos que tenemos)
+git branch REQ01 origin/REQ01
+
+**** Como borrar un branch
+git branch -d nombre_branch  (no debo estar en el mismo branch sino no lo puede borrar si estuviera vinculado con un branch remoto solo borra el branch local) y con la d en minuscula solamente si el branch no tiene nada 
+distinto con el master, sino te va a decir que falta hacer un merge. Si igualmente deseamos borrar el branch se usa la d en mayuscula de la siguiente manera:
+git branch -D nombre_branch
+
+*** Para ver solo los branch remoto **
+git branch -r
+
+
+*** Como borrar un branch remoto **
+git push origin --delete REQ01
+
+*** Para trabajar en equipo **
+Existen dos formas:
+1) Una es desde github ir a la seccion "settings" y agregar "Colaboradores". Ahora estoy colaboradores se pueden bajar
+todo el proyecto y trabajar en el master y en los branch si es que hay, de esta manera no se tiene el control sobre el proyecto
+ya que pueden alterar el master.
+2) La otra forma es hacer un Fork desde github, y ahi el colaborador trabaja sobre esa copia del proyecto y cuando termine de hacer
+todos los cambios los sube y a traves del comando "pull request" desde la pagina le notifica al dueño del proyecto que los mire,
+si el dueño del proyecto da el ok entonces se integra al proyecto principal.
